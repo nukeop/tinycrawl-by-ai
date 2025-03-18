@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tiny Crawl</title>
     <style>
+        @font-face {
+            font-family: 'PixelMono';
+            src: url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         body {
             margin: 0;
             padding: 0;
@@ -15,11 +22,13 @@
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            font-family: monospace;
         }
 
         #game {
             image-rendering: pixelated;
             image-rendering: crisp-edges;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>

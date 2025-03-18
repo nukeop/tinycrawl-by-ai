@@ -75,15 +75,31 @@ Assets are organized into:
 
 ## Architectural Decisions
 
-_No architectural decisions have been documented yet._
+### Scaling System (Current Date)
+
+1. **Base Resolution**: The game uses a tiny 60x40 pixel viewport as the base resolution to maintain the minimalist pixel art aesthetic.
+
+2. **Integer Scaling**: We've implemented 500% zoom (ZOOM_LEVEL = 5) to ensure each game pixel maps exactly to a 5x5 block of screen pixels. This preserves the crisp pixel art style without blurring.
+
+3. **Pixel Art Rendering Optimizations**:
+
+   - Set pixelArt: true in Phaser config
+   - Disabled antialiasing
+   - Enabled roundPixels option to prevent subpixel rendering
+   - Added CSS properties for pixel-perfect rendering (image-rendering: pixelated)
+
+4. **Placeholder Sprite Generation**: Until final art assets are ready, we're using Phaser's graphics API to generate placeholder sprites at runtime.
+
+5. **Scaling Test Scene**: Added a dedicated scene to verify pixel-perfect rendering, including single-pixel lines and properly scaled sprites.
 
 ## Technical Debt
 
-_No technical debt has been identified yet._
+- The placeholder sprite generation in BootScene should eventually be replaced with proper sprite loading.
 
 ## Future Considerations
 
-_No future considerations have been documented yet._
+- Consider implementing a custom pixel font renderer for consistent text display
+- Plan for responsive scaling on different sized embedding contexts
 
 ## Architecture Diagrams
 

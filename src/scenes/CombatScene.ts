@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { Player } from '../entities/Player';
 import { Enemy, EnemyConfig } from '../entities/Enemy';
 import { CombatSystem, CombatAction } from '../systems/CombatSystem';
+import { PixelTextHelper } from '../utils/PixelTextHelper';
 import { COLORS, FONT } from '../utils/constants';
 import { debugLog } from '../utils/debug';
 
@@ -11,6 +12,7 @@ export class CombatScene extends Phaser.Scene {
   private combatSystem!: CombatSystem;
   private actionButtons: Phaser.GameObjects.Text[] = [];
   private combatLog!: Phaser.GameObjects.Text;
+  private textHelper!: PixelTextHelper;
   
   constructor() {
     super({ key: 'CombatScene' });
@@ -24,6 +26,9 @@ export class CombatScene extends Phaser.Scene {
   }
   
   create(): void {
+    // Initialize text helper
+    this.textHelper = new PixelTextHelper(this);
+    
     // If we don't have a player yet, create a placeholder one
     if (!this.player) {
       this.player = new Player({
@@ -44,10 +49,7 @@ export class CombatScene extends Phaser.Scene {
     this.createCombatUI();
     
     // Create combat log
-    this.combatLog = this.add.text(2, 32, '', {
-      fontSize: FONT.TINY,
-      color: COLORS.WHITE
-    });
+    this.combatLog = this.textHelper.createPixelText(2, 32, '', FONT.TINY, COLORS.WHITE);
     
     // Log start of combat
     this.logMessage('Combat started!');
@@ -82,18 +84,20 @@ export class CombatScene extends Phaser.Scene {
     // Create action buttons
     actions.forEach((actionData, index) => {
       const x = 5 + (index * 10);
-      const button = this.add.text(x, 27, actionData.text, {
-        fontSize: FONT.TINY,
-        color: COLORS.WHITE
-      });
       
-      button.setInteractive({ useHandCursor: true });
-      button.on('pointerdown', () => {
-        if (this.combatSystem.isPlayerTurn) {
-          this.combatSystem.executePlayerAction(actionData.action);
-          this.updateCombatUI();
-        }
-      });
+      const button = this.textHelper.createPixelTextButton(
+        x, 
+        27, 
+        actionData.text,
+        () => {
+          if (this.combatSystem.isPlayerTurn) {
+            this.combatSystem.executePlayerAction(actionData.action);
+            this.updateCombatUI();
+          }
+        },
+        FONT.TINY,
+        COLORS.WHITE
+      );
       
       this.actionButtons.push(button);
     });

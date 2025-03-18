@@ -4,6 +4,7 @@ import { MenuScene } from './scenes/MenuScene';
 import { ExplorationScene } from './scenes/ExplorationScene';
 import { CombatScene } from './scenes/CombatScene';
 import { UIScene } from './scenes/UIScene';
+import { ScalingTestScene } from './scenes/ScalingTestScene';
 import { logSystemInfo } from './utils/debug';
 import { GAME_WIDTH, GAME_HEIGHT, ZOOM_LEVEL, COLORS } from './utils/constants';
 
@@ -23,6 +24,11 @@ const config: Phaser.Types.Core.GameConfig = {
     autoCenter: Phaser.Scale.CENTER_BOTH,
     zoom: ZOOM_LEVEL,
   },
+  render: {
+    antialias: false,
+    pixelArt: true,
+    roundPixels: true
+  },
   physics: {
     default: 'arcade',
     arcade: {
@@ -30,7 +36,7 @@ const config: Phaser.Types.Core.GameConfig = {
       debug: false,
     },
   },
-  scene: [BootScene, MenuScene, ExplorationScene, CombatScene, UIScene],
+  scene: [BootScene, MenuScene, ExplorationScene, CombatScene, UIScene, ScalingTestScene],
 };
 
 // Initialize the game

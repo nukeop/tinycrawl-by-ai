@@ -19,10 +19,11 @@ export const COLORS = {
   UI_BACKGROUND: '#333333',
 };
 
-// Font sizes
+// Font settings
 export const FONT = {
   TINY: '5px',
   SMALL: '8px',
+  FAMILY: 'monospace', // Using monospace for better pixel alignment
 };
 
 // Asset paths

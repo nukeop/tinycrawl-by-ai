@@ -1,3 +1,5 @@
+import { Entity } from '../entities/Entity';
+
 export enum ItemType {
   WEAPON,
   ARMOR,
@@ -5,13 +7,21 @@ export enum ItemType {
   KEY_ITEM
 }
 
+export interface ItemTarget {
+  health: number;
+  magic?: number;
+  [key: string]: unknown;
+}
+
+export type ItemEffect = (target: ItemTarget) => void;
+
 export type ItemConfig = {
   id: string;
   name: string;
   type: ItemType;
   value: number;
   usable: boolean;
-  effect?: (target: any) => void;
+  effect?: ItemEffect;
 };
 
 export class Item {
@@ -20,7 +30,7 @@ export class Item {
   private _type: ItemType;
   private _value: number;
   private _usable: boolean;
-  private _effect?: (target: any) => void;
+  private _effect?: ItemEffect;
   
   constructor(config: ItemConfig) {
     this._id = config.id;
@@ -51,7 +61,7 @@ export class Item {
     return this._usable;
   }
   
-  public use(target: any): boolean {
+  public use(target: ItemTarget): boolean {
     if (!this._usable || !this._effect) return false;
     
     this._effect(target);

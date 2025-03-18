@@ -29,15 +29,21 @@ _No phases have been completed yet._
   - Implemented combat system
   - Set up player controller
   - Created inventory system
+- Step 0.5: Implement Scaling System - Completed
+  - Created rendering canvas at 60x40 pixels
+  - Implemented integer scaling (500%)
+  - Configured pixel-perfect rendering
+  - Added scaling test scene to verify rendering quality
+  - Created placeholder sprites for testing
 
 ## Current Work
 
 Currently working on Phase 0: Project Setup
 
-- Step 0.5: Implement Scaling System
-  - Set up rendering canvas at 60x40 pixels
-  - Ensure pixel-perfect rendering
-  - Test rendering with sample graphics
+- Step 0.6: Configure for Web Embedding
+  - Create embedding API/interface
+  - Configure iframe compatibility settings
+  - Test embedding functionality
 
 ## Implementation Notes
 
@@ -46,7 +52,9 @@ Currently working on Phase 0: Project Setup
 - Implemented inventory system for item management
 - Set up basic scene transitions between exploration and combat
 - Added player movement with keyboard and mouse controls
-- Included placeholder graphics for testing
+- Created placeholder sprites with Phaser's graphics objects
+- Added PixelScaleHelper to ensure rendering consistency
+- Created a test scene to verify pixel-perfect scaling
 
 ## Testing Status
 
@@ -54,17 +62,15 @@ Currently working on Phase 0: Project Setup
 - Basic scene transitions work correctly
 - Combat system logic works as expected
 - Unit tests for debug utility are passing
+- Pixel scaling tests confirm proper rendering
 
 ## Known Issues
 
-- Placeholder graphics instead of actual sprites
-- No asset loading system yet
+- Only placeholder graphics instead of actual sprites
 - Combat system needs more testing
-- Type issues need to be fixed in InventorySystem
 
 ## Next Steps
 
-1. Complete Step 0.5: Implement Scaling System
-2. Add an Asset system to load placeholder player/enemy sprites
-3. Fix type issues in InventorySystem - replace 'any' with proper types
-4. Proceed to Step 0.6: Configure for Web Embedding
+1. Complete Step 0.6: Configure for Web Embedding
+2. Begin Phase 1: Core Game Engine implementation
+3. Design and implement proper sprite assets

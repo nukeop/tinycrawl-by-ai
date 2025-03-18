@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { Player } from '../entities/Player';
 import { PlayerController } from '../controllers/PlayerController';
+import { PixelTextHelper } from '../utils/PixelTextHelper';
 import { createBasicTilemap, renderTilemap } from '../utils/TilemapHelper';
 import { COLORS, FONT } from '../utils/constants';
 
@@ -8,12 +9,16 @@ export class ExplorationScene extends Phaser.Scene {
   private player!: Player;
   private controller!: PlayerController;
   private statusText!: Phaser.GameObjects.Text;
+  private textHelper!: PixelTextHelper;
   
   constructor() {
     super({ key: 'ExplorationScene' });
   }
   
   create(): void {
+    // Initialize text helper
+    this.textHelper = new PixelTextHelper(this);
+    
     // Create a basic tilemap (we'll replace this with actual game data later)
     const tilemap = createBasicTilemap(this, 15, 10);
     
@@ -43,21 +48,25 @@ export class ExplorationScene extends Phaser.Scene {
     this.controller = new PlayerController(this, this.player);
     
     // Add status text
-    this.statusText = this.add.text(30, 2, 'Dungeon Floor 1', {
-      fontSize: FONT.TINY,
-      color: COLORS.WHITE
-    }).setOrigin(0.5, 0);
+    this.statusText = this.textHelper.createPixelText(
+      30, 
+      2, 
+      'Dungeon Floor 1',
+      FONT.TINY,
+      COLORS.WHITE
+    ).setOrigin(0.5, 0);
     
     // Add combat trigger (temporary for testing)
-    const combatTrigger = this.add.text(30, 35, 'Enter Combat', {
-      fontSize: FONT.TINY,
-      color: COLORS.WHITE
-    }).setOrigin(0.5);
-    
-    combatTrigger.setInteractive({ useHandCursor: true });
-    combatTrigger.on('pointerdown', () => {
-      this.scene.start('CombatScene', { player: this.player });
-    });
+    const combatTrigger = this.textHelper.createPixelTextButton(
+      30,
+      35,
+      'Enter Combat',
+      () => {
+        this.scene.start('CombatScene', { player: this.player });
+      },
+      FONT.TINY,
+      COLORS.WHITE
+    ).setOrigin(0.5);
   }
   
   update(): void {
