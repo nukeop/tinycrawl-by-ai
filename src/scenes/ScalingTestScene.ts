@@ -1,25 +1,18 @@
 import Phaser from 'phaser';
-import { PixelScaleHelper } from '../utils/PixelScaleHelper';
-import { PixelTextHelper } from '../utils/PixelTextHelper';
-import { COLORS, FONT } from '../utils/constants';
+import { BaseScene } from './BaseScene';
+import { COLORS, FONT, SCENES } from '../utils/constants';
 
-export class ScalingTestScene extends Phaser.Scene {
-  private pixelHelper!: PixelScaleHelper;
-  private textHelper!: PixelTextHelper;
-  
+export class ScalingTestScene extends BaseScene {
   constructor() {
-    super({ key: 'ScalingTestScene' });
+    super('ScalingTestScene');
   }
   
   create(): void {
-    // Initialize helpers
-    this.pixelHelper = new PixelScaleHelper(this);
-    this.textHelper = new PixelTextHelper(this);
-    
-    this.pixelHelper.initPixelScale();
+    // Call parent create method first to initialize helpers
+    super.create();
     
     // Draw test pattern to verify pixel rendering
-    this.pixelHelper.drawTestPattern();
+    this.pixelScaleHelper.drawTestPattern();
     
     // Add 1px test lines
     const graphics = this.add.graphics();
@@ -40,11 +33,11 @@ export class ScalingTestScene extends Phaser.Scene {
     graphics.strokePath();
     
     // Add text with our helper
-    this.textHelper.createPixelText(30, 5, 'SCALE TEST', FONT.TINY, COLORS.WHITE)
+    this.pixelTextHelper.createPixelText(30, 5, 'SCALE TEST', FONT.TINY, COLORS.WHITE)
       .setOrigin(0.5, 0);
     
     // Text rendering comparison
-    this.textHelper.createPixelText(12, 16, 'CRISP', FONT.TINY, '#ff0000');
+    this.pixelTextHelper.createPixelText(12, 16, 'CRISP', FONT.TINY, '#ff0000');
     
     // Regular text for comparison
     this.add.text(36, 16, 'NORMAL', { 
@@ -57,12 +50,12 @@ export class ScalingTestScene extends Phaser.Scene {
     this.add.sprite(45, 30, 'enemy');
     
     // Add return button with the helper
-    this.textHelper.createPixelTextButton(
+    this.pixelTextHelper.createPixelTextButton(
       30, 
       38, 
       'RETURN',
       () => {
-        this.scene.start('MenuScene');
+        this.transitionToScene({ target: SCENES.MENU });
       },
       FONT.TINY,
       COLORS.WHITE

@@ -1,21 +1,19 @@
-import Phaser from 'phaser';
+import { BaseScene } from './BaseScene';
 import { Player } from '../entities/Player';
 import { Enemy, EnemyConfig } from '../entities/Enemy';
 import { CombatSystem, CombatAction } from '../systems/CombatSystem';
-import { PixelTextHelper } from '../utils/PixelTextHelper';
-import { COLORS, FONT } from '../utils/constants';
+import { COLORS, FONT, SCENES } from '../utils/constants';
 import { debugLog } from '../utils/debug';
 
-export class CombatScene extends Phaser.Scene {
+export class CombatScene extends BaseScene {
   private player!: Player;
   private enemies: Enemy[] = [];
   private combatSystem!: CombatSystem;
   private actionButtons: Phaser.GameObjects.Text[] = [];
   private combatLog!: Phaser.GameObjects.Text;
-  private textHelper!: PixelTextHelper;
   
   constructor() {
-    super({ key: 'CombatScene' });
+    super(SCENES.COMBAT);
   }
   
   init(data: { player?: Player }): void {
@@ -26,8 +24,8 @@ export class CombatScene extends Phaser.Scene {
   }
   
   create(): void {
-    // Initialize text helper
-    this.textHelper = new PixelTextHelper(this);
+    // Call parent create method first to initialize helpers
+    super.create();
     
     // If we don't have a player yet, create a placeholder one
     if (!this.player) {
@@ -49,10 +47,15 @@ export class CombatScene extends Phaser.Scene {
     this.createCombatUI();
     
     // Create combat log
-    this.combatLog = this.textHelper.createPixelText(2, 32, '', FONT.TINY, COLORS.WHITE);
+    this.combatLog = this.pixelTextHelper.createPixelText(2, 32, '', FONT.TINY, COLORS.WHITE);
     
     // Log start of combat
     this.logMessage('Combat started!');
+    
+    // Add escape key to pause
+    this.input.keyboard.on('keydown-ESC', () => {
+      this.pauseGame();
+    });
   }
   
   private createEnemies(): void {
@@ -85,7 +88,7 @@ export class CombatScene extends Phaser.Scene {
     actions.forEach((actionData, index) => {
       const x = 5 + (index * 10);
       
-      const button = this.textHelper.createPixelTextButton(
+      const button = this.pixelTextHelper.createPixelTextButton(
         x, 
         27, 
         actionData.text,
@@ -115,13 +118,13 @@ export class CombatScene extends Phaser.Scene {
         this.logMessage('Victory!');
         // Return to exploration after a delay
         this.time.delayedCall(2000, () => {
-          this.scene.start('ExplorationScene');
+          this.transitionToScene({ target: SCENES.EXPLORATION });
         });
       } else {
         this.logMessage('Defeat!');
         // Return to menu after a delay
         this.time.delayedCall(2000, () => {
-          this.scene.start('MenuScene');
+          this.transitionToScene({ target: SCENES.MENU });
         });
       }
     }

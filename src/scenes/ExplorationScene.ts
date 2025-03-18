@@ -1,23 +1,22 @@
 import Phaser from 'phaser';
+import { BaseScene } from './BaseScene';
 import { Player } from '../entities/Player';
 import { PlayerController } from '../controllers/PlayerController';
-import { PixelTextHelper } from '../utils/PixelTextHelper';
-import { createBasicTilemap, renderTilemap } from '../utils/TilemapHelper';
-import { COLORS, FONT } from '../utils/constants';
+import { createBasicTilemap } from '../utils/TilemapHelper';
+import { COLORS, FONT, SCENES } from '../utils/constants';
 
-export class ExplorationScene extends Phaser.Scene {
+export class ExplorationScene extends BaseScene {
   private player!: Player;
   private controller!: PlayerController;
   private statusText!: Phaser.GameObjects.Text;
-  private textHelper!: PixelTextHelper;
   
   constructor() {
-    super({ key: 'ExplorationScene' });
+    super(SCENES.EXPLORATION);
   }
   
   create(): void {
-    // Initialize text helper
-    this.textHelper = new PixelTextHelper(this);
+    // Call parent create method first to initialize helpers
+    super.create();
     
     // Create a basic tilemap (we'll replace this with actual game data later)
     const tilemap = createBasicTilemap(this, 15, 10);
@@ -48,7 +47,7 @@ export class ExplorationScene extends Phaser.Scene {
     this.controller = new PlayerController(this, this.player);
     
     // Add status text
-    this.statusText = this.textHelper.createPixelText(
+    this.statusText = this.pixelTextHelper.createPixelText(
       30, 
       2, 
       'Dungeon Floor 1',
@@ -57,16 +56,24 @@ export class ExplorationScene extends Phaser.Scene {
     ).setOrigin(0.5, 0);
     
     // Add combat trigger (temporary for testing)
-    const combatTrigger = this.textHelper.createPixelTextButton(
+    const combatTrigger = this.pixelTextHelper.createPixelTextButton(
       30,
       35,
       'Enter Combat',
       () => {
-        this.scene.start('CombatScene', { player: this.player });
+        this.transitionToScene({ 
+          target: SCENES.COMBAT, 
+          data: { player: this.player } 
+        });
       },
       FONT.TINY,
       COLORS.WHITE
     ).setOrigin(0.5);
+    
+    // Add escape key to pause
+    this.input.keyboard.on('keydown-ESC', () => {
+      this.pauseGame();
+    });
   }
   
   update(): void {

@@ -1,47 +1,45 @@
 import Phaser from 'phaser';
-import { COLORS, FONT } from '../utils/constants';
-import { PixelTextHelper } from '../utils/PixelTextHelper';
+import { BaseScene } from './BaseScene';
+import { COLORS, FONT, SCENES } from '../utils/constants';
 
-export class MenuScene extends Phaser.Scene {
-  private textHelper!: PixelTextHelper;
-  
+export class MenuScene extends BaseScene {
   constructor() {
-    super({ key: 'MenuScene' });
+    super(SCENES.MENU);
   }
 
   create(): void {
-    // Initialize text helper
-    this.textHelper = new PixelTextHelper(this);
+    // Call parent create method first to initialize helpers
+    super.create();
     
     const centerX = Math.floor(this.scale.width / 2);
     const centerY = Math.floor(this.scale.height / 2);
 
-    // Title text - ensure it's on pixel boundaries
-    const titleText = this.textHelper.createPixelText(
+    // Title text - with smaller text for better fit
+    const titleText = this.pixelTextHelper.createPixelText(
       centerX, 
-      centerY - 12, 
+      centerY - 8, 
       'TINY CRAWL',
       FONT.SMALL,
       COLORS.WHITE
     );
     titleText.setOrigin(0.5);
 
-    // Menu options
+    // Menu options with shorter text
     const menuItems = [
-      { text: 'START GAME', scene: 'ExplorationScene' },
-      { text: 'SCALE TEST', scene: 'ScalingTestScene' }
+      { text: 'PLAY', scene: SCENES.EXPLORATION },
+      { text: 'TEST', scene: 'ScalingTestScene' }
     ];
     
     // Create menu options with the helper
     menuItems.forEach((item, index) => {
-      const y = centerY + (index * 7);
+      const y = centerY + (index * 5); // Reduced spacing
       
-      this.textHelper.createPixelTextButton(
+      this.pixelTextHelper.createPixelTextButton(
         centerX,
         y,
         item.text,
         () => {
-          this.scene.start(item.scene);
+          this.transitionToScene({ target: item.scene });
         },
         FONT.TINY,
         COLORS.WHITE
@@ -55,6 +53,11 @@ export class MenuScene extends Phaser.Scene {
       duration: 1200,
       yoyo: true,
       repeat: -1
+    });
+    
+    // Add escape key to pause
+    this.input.keyboard.on('keydown-ESC', () => {
+      this.pauseGame();
     });
   }
 }

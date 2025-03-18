@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GAME_WIDTH, GAME_HEIGHT, ZOOM_LEVEL } from './constants';
+import { debugLog } from './debug';
 
 export class PixelScaleHelper {
   private scene: Phaser.Scene;
@@ -12,6 +13,12 @@ export class PixelScaleHelper {
    * Initialize the scaling for pixel-perfect rendering
    */
   public initPixelScale(): void {
+    // Safety check to make sure cameras exist
+    if (!this.scene.cameras || !this.scene.cameras.main) {
+      debugLog('Warning: Cannot initialize pixel scale - cameras not available');
+      return;
+    }
+    
     // Set zoom level for pixel-perfect scaling
     this.scene.cameras.main.setZoom(ZOOM_LEVEL);
     
@@ -20,6 +27,8 @@ export class PixelScaleHelper {
     
     // Disable smoothing for pixel art
     this.scene.cameras.main.setRoundPixels(true);
+    
+    debugLog(`Pixel scale initialized with zoom level ${ZOOM_LEVEL}`);
   }
   
   /**

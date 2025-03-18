@@ -1,20 +1,14 @@
-import Phaser from 'phaser';
+import { BaseScene } from './BaseScene';
 import { AssetManager } from '../utils/AssetManager';
-import { PixelTextHelper } from '../utils/PixelTextHelper';
-import { COLORS, FONT } from '../utils/constants';
+import { COLORS, FONT, SCENES } from '../utils/constants';
 import { debugLog } from '../utils/debug';
 
-export class BootScene extends Phaser.Scene {
-  private textHelper!: PixelTextHelper;
-  
+export class BootScene extends BaseScene {
   constructor() {
-    super({ key: 'BootScene' });
+    super(SCENES.BOOT);
   }
   
   preload(): void {
-    // Initialize text helper
-    this.textHelper = new PixelTextHelper(this);
-    
     // Create loading graphics
     const progress = this.add.graphics();
     
@@ -32,7 +26,7 @@ export class BootScene extends Phaser.Scene {
       this.generatePlaceholderSprites();
       
       // Start the menu scene
-      this.scene.start('MenuScene');
+      this.transitionToScene({ target: SCENES.MENU });
     });
     
     // Load assets from AssetManager
@@ -40,7 +34,11 @@ export class BootScene extends Phaser.Scene {
   }
   
   create(): void {
-    this.textHelper.createPixelText(2, 2, 'Loading...', FONT.TINY, COLORS.WHITE);
+    // Call parent create method first to initialize helpers
+    super.create();
+    
+    // Add loading text
+    this.pixelTextHelper.createPixelText(2, 2, 'Loading...', FONT.TINY, COLORS.WHITE);
   }
   
   private generatePlaceholderSprites(): void {

@@ -15,7 +15,7 @@ export class PixelTextHelper {
     x: number, 
     y: number, 
     text: string, 
-    size: '5px' | '8px' = FONT.TINY,
+    size: string = FONT.TINY,
     color: string = COLORS.WHITE
   ): Phaser.GameObjects.Text {
     const pixelText = this.scene.add.text(
@@ -23,10 +23,11 @@ export class PixelTextHelper {
       Math.floor(y),
       text,
       {
-        fontFamily: 'monospace',
+        fontFamily: FONT.FAMILY,
         fontSize: size,
         color: color,
-        resolution: 1 // Critical for crisp rendering
+        resolution: 1, // Critical for crisp rendering
+        padding: { x: 1, y: 1 } // Add slight padding to prevent clipping
       }
     );
     
@@ -48,7 +49,7 @@ export class PixelTextHelper {
     y: number,
     text: string,
     callback: () => void,
-    size: '5px' | '8px' = FONT.TINY,
+    size: string = FONT.TINY,
     color: string = COLORS.WHITE,
     hoverColor: string = '#3498db'
   ): Phaser.GameObjects.Text {

@@ -10,6 +10,7 @@ export const SCENES = {
   EXPLORATION: 'ExplorationScene',
   COMBAT: 'CombatScene',
   UI: 'UIScene',
+  SCALING_TEST: 'ScalingTestScene',
 };
 
 // Colors
@@ -21,8 +22,8 @@ export const COLORS = {
 
 // Font settings
 export const FONT = {
-  TINY: '5px',
-  SMALL: '8px',
+  TINY: '3px',  // Changed from 5px to 3px
+  SMALL: '4px', // Changed from 8px to 4px
   FAMILY: 'monospace', // Using monospace for better pixel alignment
 };
 

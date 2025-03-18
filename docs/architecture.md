@@ -92,6 +92,18 @@ Assets are organized into:
 
 5. **Scaling Test Scene**: Added a dedicated scene to verify pixel-perfect rendering, including single-pixel lines and properly scaled sprites.
 
+### Web Embedding System
+
+1. **API Communication**: Implemented a two-way communication system using the `postMessage` API to allow parent frames to control the game and receive events.
+
+2. **Singleton EmbedAPI**: Created a singleton API class to centralize embedding functionality and provide a consistent interface for both internal and external communication.
+
+3. **Responsive Scaling**: Implemented a `ResponsiveContainer` class that dynamically adjusts the game's render size based on its container while maintaining aspect ratio.
+
+4. **URL Parameters**: Added support for customizing the game's behavior when embedded through URL parameters (zoom level, API enablement, fullscreen support).
+
+5. **Global API Access**: When API access is enabled, the EmbedAPI instance is exposed to the global scope for direct method calls from parent frames.
+
 ## Technical Debt
 
 - The placeholder sprite generation in BootScene should eventually be replaced with proper sprite loading.
